@@ -1,0 +1,245 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+    <title>{{ article_obj.title }}</title>
+    <link rel="stylesheet" href="{% static 'css/list.css' %}">
+    <link rel="stylesheet" type="text/css" href="/static/assets/waifu.min.css?v=1.4.2"/>
+    <link rel="stylesheet" type="text/css" href="/static/css/like.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/css/home.css"/>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+
+            translate: "no"
+
+        }
+
+
+    </style>
+{% endblock %}
+{% block body %}
+
+    <div class="col-md-6 text-center" style=";position: fixed;right: -30%;top: 10%">
+        <details>
+            <summary>
+                <span data-css-icon="menu">标签（{{ tag_count }}）<i></i></span>
+            </summary>
+            <div>
+                <ul>
+                    {% for tag in tags %}
+                        <li class="btn-default" style="line-height: 50px ;">
+                            <a href="/article/q/?Tag={{ tag.id }}">{{ tag.tag }}({{ tag.article2articletag_set.count }})</a>
+                        </li>
+
+                    {% endfor %}
+
+                </ul>
+            </div>
+        </details>
+        <details>
+            <summary>
+                <span data-css-icon="menu">分类({{ type_count }})<i></i></span>
+            </summary>
+            <div>
+                <ul>
+                    {% for type in types %}
+                        {% for type_l in type_list %}
+                            {% if forloop.counter == forloop.parentloop.counter %}
+                                <li class="btn-default" style="line-height: 50px ;">
+                                    <a href="/article/q/?Type={{ type.id }}">{{ type.types }}({{ type_l.0 }})</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            </div>
+        </details>
+        <details>
+            <summary>
+                <span data-css-icon="menu">发布时间({{ date_list.count }})<i></i></span>
+            </summary>
+            <div>
+                <ul>
+                    {% for date in date_list %}
+                        <li class="btn-default" style="line-height: 50px ;">
+                            <a href="/article/q/?Time={{ date.0|date:'Y-m' }}">{{ date.0|date:'Y-m' }}({{ date.1 }})</a>
+                        </li>
+                    {% endfor %}
+
+                </ul>
+            </div>
+        </details>
+
+    </div>
+
+    <div class="clearfix">
+        <div class="container  " style="color: white;margin-top: 0;position:absolute;left: 18%">
+            <input type="hidden" id="article_id" value="{{ article_obj.id }}">
+            <h1 class="text-center"><a
+                    href="/article/q/?Type={{ article_type.id }}">{{ article_type.types }}</a>&nbsp;|&nbsp;{{ article_obj.title|safe }}
+            </h1>
+            <p class="text-right">发布时间：{{ article_obj.create_time }}&nbsp;|&nbsp;最近修改：{{ article_obj.revise_time }}</p>
+            <hr>
+            <p>{{ article_obj.content|safe }}</p>
+            <hr>
+            <div class="text-right">
+                <button id="like_btn" x-data="{
+  state: 'Unliked',
+  usedKeyboard: false,
+  async updateState(to) {
+      this.state = 'Saving'
+      await new Promise(resolve => setTimeout(resolve, 1000))
+      this.state = to
+  }
+}" :class="{
+  'like unliked': state === 'Unliked',
+  'like saving': state === 'Saving',
+  'like liked': state === 'Liked',
+  'focus:outline-none': !usedKeyboard
+}" @click="updateState(state === 'Unliked' ? 'Liked' : 'Unliked')" @keydown.window.tab="usedKeyboard = true">
+                    <span id="like_state" class="like-icon like-icon-state" aria-label="state" x-text="state"
+                          aria-live="polite">Unliked</span>
+                </button>
+                <div class="text-center"
+                     style="width: 50px;background-color: white;font-size: 20px;color: black;display: inline-block;vertical-align: middle"
+                     id="like_count">{{ article_obj.like_count }}</div>
+            </div>
+            <div>
+                <h1>留言<span class="glyphicon glyphicon-edit" style="position: relative;top: 4px"></span>
+                </h1>
+                <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12" style="margin: 0;padding: 0">
+                    <div class="col-md-6 col-lg-6  col-sm-6 col-xs-6" style="margin: 0;padding: 0">
+                        <div class="user-box">
+                            <input type="text" id="user" required="">
+                            <label>昵称(可不填)</label>
+                        </div>
+
+                    </div>
+                    <div class="col-md-6 col-lg-6  col-sm-6 col-xs-6">
+                                <textarea
+                                        style=" border:1px gray solid  ;border-radius:5px;background-color:rgba(179, 212, 252,.0);width: 335px;height: 100px;padding: 10px;resize: none;display: inline;color: white;font-size: 20px"
+                                        placeholder="说点啥？(ctrl+回车发送)" maxlength="50" id="send_mes"></textarea>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div>
+                <div class="container">
+                    {% for article_message in page_queryset %}
+                        <h3 style="color: cornflowerblue">@{{ article_message.user }}:</h3>
+                        <h4 style="color:#fff;margin: 0">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ article_message.message_content }}</h4>
+                        <h3 class="text-right" style="margin: 0">
+                            <small>-{{ article_message.message_create_time|date:'Y-m-d H:i:s' }}</small></h3>
+                        <hr style="margin: 5px 0">
+                    {% endfor %}
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+    <script src="/static/assets/jquery.min.js?v=3.3.1"></script>
+
+    <!-- 实现拖动效果，需引入 JQuery UI -->
+    <script src="/static/assets/jquery-ui.min.js?v=1.12.1"></script>
+
+    <div class="waifu">
+        <div class="waifu-tips"></div>
+        <canvas id="live2d" class="live2d"></canvas>
+        <div class="waifu-tool">
+            <span class="fui-home"></span>
+            <span class="fui-chat"></span>
+            <span class="fui-eye"></span>
+            <span class="fui-user"></span>
+            <span class="fui-photo"></span>
+            <span class="fui-info-circle"></span>
+            <span class="fui-cross"></span>
+        </div>
+    </div>
+
+{% endblock %}
+F
+
+
+{% block js %}
+    <script type="text/javascript" src="http://repo.bfw.wiki/bfwrepo/js/gsap.3.2.4.js"></script>
+    <script type="text/javascript" src="/static/js/like.js"></script>
+    <script type="text/javascript" src="http://repo.bfw.wiki/bfwrepo/js/alpine.min.js"></script>
+
+    <script src="/static/assets/waifu-tips.js?v=1.4.2"></script>
+    <script src="/static/assets/live2d.min.js?v=1.0.5"></script>
+    <script type="text/javascript">
+        /* 可直接修改部分参数 */
+        live2d_settings['modelId'] = 4;                  // 默认模型 ID
+        live2d_settings['modelTexturesId'] = 50;         // 默认材质 ID
+        live2d_settings['modelStorage'] = false;         // 不储存模型 ID
+        live2d_settings['canCloseLive2d'] = true;       // 隐藏 关闭看板娘 按钮
+        live2d_settings['canTurnToHomePage'] = false;    // 隐藏 返回首页 按钮
+        live2d_settings['waifuSize'] = '400x350';        // 看板娘大小
+        live2d_settings['waifuTipsSize'] = '250x70';    // 提示框大小
+        live2d_settings['waifuFontSize'] = '20px';       // 提示框字体
+        live2d_settings['waifuToolFont'] = '26px';       // 工具栏字体
+        live2d_settings['waifuToolLine'] = '30px';       // 工具栏行高
+        live2d_settings['waifuToolTop'] = '-60px';       // 工具栏顶部边距
+        live2d_settings['waifuDraggable'] = 'disable';    // 拖拽样式
+        live2d_settings['aboutPageUrl'] = '/';   // 关于页地址, '{URL 网址}'
+        live2d_settings['homePageUrl'] = '/';       // 主页地址，可选 'auto'(自动), '{URL 网址}'
+        live2d_settings['waifuEdgeSide'] = 'right:0';     // 看板娘贴边方向，例如 'left:0'(靠左 0px), 'right:30'(靠右 30px)
+        live2d_settings['waifuDraggableRevert'] = false;         // 松开鼠标还原拖拽位置，可选 true(真), false(假)
+        live2d_settings['canTurnToAboutPage'] = false;         // 显示 跳转关于页  按钮，可选 true(真), false(假)
+        live2d_settings['canTurnToHomePage'] = true;         // 显示 返回首页    按钮，可选 true(真), false(假)
+        /* 在 initModel 前添加 */
+        live2d_settings['showHitokoto'] = true;         // 显示一言
+        live2d_settings['showF12Status'] = true;         // 显示加载状态
+        live2d_settings['showF12Message'] = false;        // 显示看板娘消息
+        live2d_settings['showF12OpenMsg'] = true;         // 显示控制台打开提示
+        live2d_settings['showCopyMessage'] = true;         // 显示 复制内容 提示
+        live2d_settings['showWelcomeMessage'] = true;         // 显示进入面页欢迎词
+        initModel("/static/assets/waifu-tips.json")
+    </script>
+
+
+
+    <script>
+
+        $('#send_mes').keydown(function (e) {
+            if (e.ctrlKey && e.which == 13) {
+                $.ajax({
+                    url: '/getmessage/',
+                    type: 'post',
+                    data: {
+                        'id': $('#article_id').val(),
+                        'send_mes': $('#send_mes').val(),
+                        'user': $('#user').val(),
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    success: function (args) {
+
+                        if (args.error == 200) {
+                            location.reload();
+                        } else {
+                            alert(args.mes)
+                        }
+                    }
+
+                })
+            }
+        });
+    </script>
+{% endblock %}

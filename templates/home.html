@@ -1,0 +1,191 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block css %}
+    <title>贝克街-首页</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/default.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/css/component.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/css/home.css"/>
+     <link rel="stylesheet" type="text/css" href="/static/assets/waifu.min.css?v=1.4.2"/>
+    <script src="/static/js/modernizr.custom.js"></script>
+    <style>
+        table .type {
+            font-family: 'Montserrat Alternates', sans-serif;
+            font-weight: 900;
+            border-radius: 5px;
+            border: aliceblue solid 1px;
+            background-color: aliceblue;
+            color: black;
+        }
+
+    </style>
+
+
+{% endblock %}
+{% block body %}
+
+
+    <div class="row container-fluid" style="z-index: 0">
+        <div class="col-md-6 col-xs-12 col-sm-12" id="title">
+            <div class="jumbotron col-md-6 col-xs-12 col-sm-12" id="beike" style="border-right: solid darkgrey 1px">
+                <h1 class="text-center"
+                    style="color: white;font-family: ' Serif SC La Doulaise', cursive;font-size: 100px ">贝克街</h1>
+                <h2 class="text-center"><small class="text-center" style="color: white">{{ text.text }}</small></h2>
+                <h2 class="text-center"><small class="text-center" style="color: white">近期目标：<span
+                        style="font-family: 'Droid Sans Mono Dotted',cursive">{{ target.target }}</span></small></h2>
+            </div>
+        </div>
+        <div class="col-md-6 col-xs-6 col-sm-6" style="position: absolute;right: 10%;top: -10%;z-index: 200">
+            <div class="container">
+
+                <div class="main">
+                    <div id="cbp-qtrotator" class="cbp-qtrotator">
+                        {% for home_messege in home_messeges %}
+                            <div class="cbp-qtcontent" style="background-color: rgba(255,255,255,.1)">
+                                <blockquote>
+                                    <p>{{ home_messege.home_message }}</p>
+                                    <footer class="text-right">@{{ home_messege.home_article }}</footer>
+                                    <small class="text-right"
+                                           style="font-size: 20px">{{ home_messege.creat_time|date:'Y-m-d H:i:s' }}</small>
+                                </blockquote>
+                            </div>
+                        {% endfor %}
+                        <header class="clearfix" style="line-height: 30px">
+                            <h1>留言<span class="glyphicon glyphicon-edit" style="position: relative;top: 4px"></span>
+                            </h1>
+                            <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12" style="margin: 0;padding: 0">
+                                <div class="col-md-6 col-lg-6  col-sm-6 col-xs-6" style="margin: 0;padding: 0">
+                                    <div class="user-box">
+                                        <input type="text" id="user" required="">
+                                        <label>昵称(可不填)</label>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-6 col-lg-6  col-sm-6 col-xs-6">
+                                <textarea
+                                        style=" border:1px gray solid  ;border-radius:5px;background-color:rgba(179, 212, 252,.0);width: 335px;height: 100px;padding: 10px;resize: none;display: inline;color: white;font-size: 20px"
+                                        placeholder="说点啥？(ctrl+回车发送)" maxlength="50" id="send_mes"></textarea>
+                                </div>
+                            </div>
+                        </header>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-12 col-sm-12 col-xs-12" style="position: absolute;bottom:-40%">
+                <table class="table  "
+                       style="background-color: rgba(255,255,255,.0);color: white;border: 0;border-bottom: white 1px solid;">
+                    {% for article in articles %}
+                        <tr class="text-center">
+                            <td><a id="article_type" href="/article/q/?Type={{ article.article_types.id }}" class="type"
+                                   onmouseover="this.style.color='#a71d5d'"
+                                   onmouseout=" this.style.color = 'black' ">{{ article.article_types.types }}</a>
+                            </td>
+                            <td><a id="article_type" href="/article/q/?Title={{ article.id }}">{{ article.title }}</a>
+                            </td>
+                            <td style="color: darkgrey">发表时间：{{ article.create_time|date:'Y-m-d H:i:s' }}</td>
+                            <td style="color: darkgrey">上次修改：{{ article.revise_time|date:'Y-m-d H:i:s' }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+
+    <script src="/static/assets/jquery.min.js?v=3.3.1"></script>
+
+    <!-- 实现拖动效果，需引入 JQuery UI -->
+    <script src="/static/assets/jquery-ui.min.js?v=1.12.1"></script>
+
+    <div class="waifu">
+        <div class="waifu-tips"></div>
+        <canvas id="live2d" class="live2d"></canvas>
+        <div class="waifu-tool">
+            <span class="fui-home"></span>
+            <span class="fui-chat"></span>
+            <span class="fui-eye"></span>
+            <span class="fui-user"></span>
+            <span class="fui-photo"></span>
+            <span class="fui-info-circle"></span>
+            <span class="fui-cross"></span>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block js %}
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/jquery.cbpQTRotator.min.js"></script>
+
+    <script>
+        $(function () {
+
+            $('#cbp-qtrotator').cbpQTRotator();
+
+        });
+    </script>
+    <script>
+
+        $('#send_mes').keydown(function (e) {
+            if (e.ctrlKey && e.which == 13) {
+                $.ajax({
+                    url: '/gethomemes/',
+                    type: 'post',
+                    data: {
+                        'send_mes': $('#send_mes').val(),
+                        'user': $('#user').val(),
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    success: function (args) {
+
+                        if (args.error == 200) {
+                            location.reload();
+                        } else {
+                            alert(args.mes)
+                        }
+                    }
+
+                })
+            }
+        });
+    </script>
+
+      <script src="/static/assets/waifu-tips.js?v=1.4.2"></script>
+    <script src="/static/assets/live2d.min.js?v=1.0.5"></script>
+    <script type="text/javascript">
+
+        /* 可直接修改部分参数 */
+        live2d_settings['modelId'] = 4;                  // 默认模型 ID
+        live2d_settings['modelTexturesId'] = 50;         // 默认材质 ID
+        live2d_settings['modelStorage'] = false;         // 不储存模型 ID
+        live2d_settings['canCloseLive2d'] = true;       // 隐藏 关闭看板娘 按钮
+        live2d_settings['canTurnToHomePage'] = false;    // 隐藏 返回首页 按钮
+        live2d_settings['waifuSize'] = '400x350';        // 看板娘大小
+        live2d_settings['waifuTipsSize'] = '250x70';    // 提示框大小
+        live2d_settings['waifuFontSize'] = '20px';       // 提示框字体
+        live2d_settings['waifuToolFont'] = '26px';       // 工具栏字体
+        live2d_settings['waifuToolLine'] = '30px';       // 工具栏行高
+        live2d_settings['waifuToolTop'] = '-60px';       // 工具栏顶部边距
+        live2d_settings['waifuDraggable'] = 'disable';    // 拖拽样式
+        live2d_settings['aboutPageUrl'] = '/';   // 关于页地址, '{URL 网址}'
+        live2d_settings['homePageUrl'] = '/';       // 主页地址，可选 'auto'(自动), '{URL 网址}'
+        live2d_settings['waifuEdgeSide'] = 'left:20';     // 看板娘贴边方向，例如 'left:0'(靠左 0px), 'right:30'(靠右 30px)
+        live2d_settings['waifuDraggableRevert'] = false;         // 松开鼠标还原拖拽位置，可选 true(真), false(假)
+        live2d_settings['canTurnToAboutPage'] = false;         // 显示 跳转关于页  按钮，可选 true(真), false(假)
+        live2d_settings['canTurnToHomePage'] = true;         // 显示 返回首页    按钮，可选 true(真), false(假)
+        /* 在 initModel 前添加 */
+        live2d_settings['showHitokoto'] = true;         // 显示一言
+        live2d_settings['showF12Status'] = true;         // 显示加载状态
+        live2d_settings['showF12Message'] = false;        // 显示看板娘消息
+        live2d_settings['showF12OpenMsg'] = true;         // 显示控制台打开提示
+        live2d_settings['showCopyMessage'] = true;         // 显示 复制内容 提示
+        live2d_settings['showWelcomeMessage'] = true;         // 显示进入面页欢迎词
+        initModel("/static/assets/waifu-tips.json")
+    </script>
+
+{% endblock %}

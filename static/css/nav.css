@@ -1,0 +1,65 @@
+body, html {
+
+}
+
+.sidebar {
+    float: left;
+    width: 100px;
+    margin-left: -100px;
+    height: 100%;
+    background-color: #2c3e50;
+    overflow: hidden;
+    transition: 0.8s all;
+    position: relative;
+}
+
+.side {
+    margin-left: 0;
+}
+
+/*靠边*/
+.sidebar ul {
+    margin: 0;
+    padding: 0;
+}
+
+/*去点*/
+.sidebar ul li {
+    list-style: none;
+}
+
+/*去下划线*/
+.sidebar ul li a {
+    text-decoration: none;
+    color: white;
+    height: 80px;
+    width: 100%;
+    font-size: 40px;
+    line-height: 80px;
+    text-align: center;
+    display: block;
+    transition: 0.6s all;
+}
+
+.sidebar ul li a:hover {
+    background: #95a5a6;
+}
+
+.btn {
+    float: left;
+    padding: 0 10px;
+    font-size: 40px;
+    text-decoration: none;
+    color: #2c3e50;
+    font-family: Ionicons;
+    cursor: pointer;
+
+}
+
+.btn:before {
+    content: '\f20d';
+}
+
+.btnc:before {
+    content: '\f12a';
+}

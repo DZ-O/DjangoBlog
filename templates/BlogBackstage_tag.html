@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>标签管理</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'bootstrap-3.3.7-dist/css/bootstrap.min.css' %}">
+    <script src="/static/bootstrap-3.3.7-dist/jquery-3.2.1.min.js"></script>
+    <script src="/static/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/search.css' %}">
+
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap");
+
+        * {
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+        }
+
+        .sidebar__nav a {
+            color: white;
+            font-size: 23px;
+        }
+
+        a, ing {
+            border: 0;
+        }
+
+        :root {
+            --blue: #1376ff;
+            --black: #222228;
+            --white: #fff;
+            --gray-medium: #39393e;
+            --gray-light: #b0b0b2;
+            --radius: 10px;
+            --item-padding: 1.5rem 1.6rem;
+            --sidebar-width: 305px;
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            color: var(--gray-light);
+            background-color: var(--black);
+            padding: 20px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar__top .search {
+            display: flex;
+            background-color: var(--gray-medium);
+            padding: var(--item-padding);
+            border-radius: var(--radius);
+        }
+
+        .sidebar__top .search input {
+            border: 0;
+            outline: 0;
+            background: 0 0;
+            margin-left: 12px;
+            color: inherit;
+        }
+
+        .sidebar__top .search input::placeholder {
+            font-size: 1.6rem;
+            font-weight: 700;
+        }
+
+        .sidebar__top .top {
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .sidebar__top .top h2 {
+            color: var(--white);
+            font-size: 2.4rem;
+            font-weight: 700;
+        }
+
+        .sidebar__top .top .humburger {
+            width: 2.6rem;
+            cursor: pointer;
+        }
+
+        .sidebar__top .top .humburger .line {
+            display: block;
+            width: 100%;
+            height: 2px;
+            background-color: var(--white);
+        }
+
+        .sidebar__top .top .humburger .line:not(:last-child) {
+            margin-bottom: 4px;
+        }
+
+        .sidebar__nav {
+            width: 100%;
+            padding-top: 22px;
+        }
+
+        .sidebar__nav h5 {
+            font-size: 1.2rem;
+            margin-bottom: 22px;
+            font-weight: 700;
+        }
+
+        .sidebar h2 {
+            color: var(--white);
+            font-size: 3.2rem;
+        }
+
+        .sidebar__menu--item {
+            cursor: pointer;
+            padding: var(--item-padding);
+            border-radius: var(--radius);
+            transition: all 150ms cubic-bezier(0.92, 0.69, 0.65, 0.88);
+        }
+
+        .sidebar__menu--item:hover {
+            color: var(--white);
+        }
+
+        .sidebar__menu--item:hover svg {
+            fill: var(--white);
+        }
+
+
+        .sidebar__menu--item.is-active svg {
+            fill: var(--white);
+        }
+
+        .sidebar__menu--item:not(:last-child) {
+            margin-bottom: 1rem;
+        }
+
+        .sidebar__menu--item span {
+            margin-left: 1.2rem;
+        }
+
+        .sidebar__profile {
+            margin-top: auto;
+            display: flex;
+            align-items: center;
+        }
+
+        .sidebar__profile .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: var(--radius);
+            align-self: stretch;
+            overflow: hidden;
+        }
+
+        .sidebar__profile .avatar img {
+            border-radius: inherit;
+        }
+
+        .sidebar__profile .content {
+            margin-left: 12px;
+        }
+
+        .sidebar__profile .content strong {
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+
+        .sidebar__profile .content p {
+            color: var(--white);
+        }
+
+        .sidebar__profile .arrow {
+            margin-left: auto;
+            background-color: var(--gray-medium);
+            border-radius: var(--radius);
+            width: 25px;
+            height: 25px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .sidebar__profile .arrow svg {
+            width: 13px;
+            height: 13px;
+        }
+
+        html {
+            font-size: 10px;
+            box-sizing: border-box;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: inherit;
+        }
+
+        svg {
+            width: 18px;
+            height: 18px;
+            fill: var(--gray-light);
+        }
+
+        body {
+            width: 100%;
+            height: 100vh;
+            color: #060712;
+            background-color: #f8f4f2;
+            font-family: "Roboto", sans-serif;
+            font-size: 1.6rem;
+            font-weight: 400;
+            line-height: 1.15;
+            overflow: hidden;
+            position: relative;
+            display: grid;
+            grid-template-columns: var(--sidebar-width) 1fr;
+        }
+
+        img {
+            display: block;
+            max-width: 100%;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+<div class="sidebar">
+    <!-- sidebartop -->
+    <div class="sidebar__top">
+        <div class="top">
+            <h2>管理面板</h2>
+            <div class="humburger">
+                <span class="line"></span>
+                <span class="line"></span>
+                <span class="line"></span>
+            </div>
+        </div>
+    </div>
+    <!--sidebar navigation -->
+    <div class="sidebar__nav">
+        <h5>导航菜单</h5>
+        <ul class="sidebar__menu">
+            <li class="sidebar__menu--item method" id="update_article">
+                <a href="/BlogBackstage/">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512.001 512.001"></svg>
+                    <span>修改文章</span>
+                </a>
+            </li>
+            <li class="sidebar__menu--item " id="add_content">
+                <a href="">
+                    <svg height="512" viewBox="0 0 512.012 512.012" width="512"
+                         xmlns="http://www.w3.org/2000/svg"></svg>
+                    <span>新增文章</span>
+                </a>
+            </li>
+            <li class="sidebar__menu--item method" id="homemes">
+                <a href="/BlogBackstage/homemess">
+                    <svg height="512" viewBox="0 0 502.017 502.017" width="512"
+                         xmlns="http://www.w3.org/2000/svg"></svg>
+                    <span>首页留言管理</span>
+                </a>
+            </li>
+            <li class="sidebar__menu--item method" id="message">
+                <a href="/BlogBackstage/message">
+                    <svg height="512pt" viewBox="0 0 512 512" width="512pt" xmlns="http://www.w3.org/2000/svg"></svg>
+                    <span>文章留言管理</span>
+                </a>
+            </li>
+
+            <li class="sidebar__menu--item method" id="tag">
+                <a href="/BlogBackstage/tag">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"></svg>
+                    <span>标签管理</span>
+                </a>
+            </li>
+            <li class="sidebar__menu--item method" id="type">
+                <a href="/BlogBackstage/type">
+                    <svg id="Layer_1" enable-background="new 0 0 512 512" height="512" viewBox="0 0 512 512" width="512"
+                         xmlns="http://www.w3.org/2000/svg"></svg>
+                    <span>分类管理</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!-- sidebar profile -->
+    <div class="sidebar__profile">
+        <div class="avatar">
+            <img src="//repo.bfw.wiki/bfwrepo/image/5d653ba895333.png" alt="">
+        </div>
+        <div class="content">
+            <strong>Hello</strong>
+            <p>{{ request.user }}</p>
+        </div>
+        <div class="arrow">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 492.004 492.004" id="login_out">
+                <path d="M382.678 226.804L163.73 7.86C158.666 2.792 151.906 0 144.698 0s-13.968 2.792-19.032 7.86l-16.124 16.12c-10.492 10.504-10.492 27.576 0 38.064L293.398 245.9l-184.06 184.06c-5.064 5.068-7.86 11.824-7.86 19.028 0 7.212 2.796 13.968 7.86 19.04l16.124 16.116c5.068 5.068 11.824 7.86 19.032 7.86s13.968-2.792 19.032-7.86L382.678 265c5.076-5.084 7.864-11.872 7.848-19.088.016-7.244-2.772-14.028-7.848-19.108z"/>
+            </svg>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid row" id="page_body">
+    <input type="text" class="form-control" style="width: 100px;display: inline-block" placeholder="添加标签" id="tag_name_input">
+    <button class="btn btn-success" id="add_btn">添加标签</button>
+    <table class="table table-hover table-striped" style="width: 80%;margin: 50px auto;">
+        <tr>
+            <th>序号</th>
+            <th>标签</th>
+            <th>操作</th>
+        </tr>
+        {% for tag_obj in page_queryset %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td id="home_article">
+                    {{ tag_obj.tag }}
+                </td>
+
+                <td class="how"><a href="" class="btn btn-primary" id="update_btn" data-toggle="modal"
+                                   data-target="#myModal"
+                                   tag_id="{{ tag_obj.id }}">修改</a><a href="" class="btn btn-danger"
+                                                                      id="del_btn" tag_id="{{ tag_obj.id }}">删除</a></td>
+            </tr>
+
+        {% endfor %}
+
+
+    </table>
+    <div class="container col-md-12" style="margin: 0 0 0 500px">{{ page_obj.page_html|safe }}</div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">修改标签</h4>
+                </div>
+                <div class="modal-body">
+                    <label for="tag">标签</label>
+                    <input type="text" name="tag" id="tag_input" class="form-control">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="save_btn">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+<script>
+
+    $('.how').on('click', '#update_btn', function () {
+        tag_id = this.getAttribute('tag_id')
+
+        $('.modal').on('show.bs.modal', function () {
+            $.ajax({
+                url: '/BlogBackstage/tag/',
+                type: 'post',
+                data: {
+                    'tag_id': tag_id,
+                    'do': 'get_mes',
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function (args) {
+
+                    if (args.error == 200) {
+
+                        $('#tag_input').val(args.mess.tag)
+                        $('#tag_input').attr('tag_id', tag_id)
+
+                    } else {
+                        alert(args.error + '  ' + args.mess)
+
+                    }
+
+
+                }
+            })
+        })
+    })
+
+
+    $("#add_btn").on('click',function (){
+        tag_name = $('#tag_name_input').val()
+
+        $.ajax({
+            url: '/BlogBackstage/tag/',
+            type: 'post',
+            data: {
+                'tag_name': tag_name,
+                'do': 'add',
+            },
+            success: function (args) {
+                if (args.error == 200) {
+                    alert(args.mess)
+                    window.location.reload()
+                } else {
+                    alert(args.error + '' + args.mess)
+                }
+            }
+
+        })
+    })
+
+</script>
+
+<script charset="UTF-8" src="/static/kindeditor/kindeditor-all-min.js"></script>
+<script charset="UTF-8" src="/static/kindeditor/lang/zh-CN.js"></script>
+
+
+<script type="text/javascript" src="/static/js/backstage.js"></script>
+<script>
+    $('#login_out').click(function () {
+        $.ajax({
+            url: '/login_out/',
+            type: 'post',
+            data: {
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            success: function (args) {
+                if (args == 200) {
+                    window.location.href = '/blogLogin/'
+                } else {
+                    alert('注销失败')
+                }
+            }
+        })
+    })
+</script>
+
+<script>
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                //   Does   this   cookie   string   begin   with   the   name   we   want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    var csrftoken = getCookie('csrftoken');
+
+    function csrfSafeMethod(method) {
+        //   these   HTTP   methods   do   not   require   CSRF   protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    $.ajaxSetup({
+        beforeSend: function (xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+</script>
+
+<script>
+    $('#save_btn').on('click', function () {
+        tag_id = $('#tag_input').attr('tag_id')
+        tag_name = $('#tag_input').val()
+
+        $.ajax({
+            url: '/BlogBackstage/tag/',
+            type: 'post',
+            data: {
+                'tag_id': tag_id,
+                'tag_name': tag_name,
+                'do': 'change',
+            },
+            success: function (args) {
+                if (args.error == 200) {
+                    alert(args.mess)
+                    window.location.reload()
+                } else {
+                    alert(args.error + '' + args.mess)
+                }
+            }
+
+        })
+
+
+    })
+
+
+    $('.how').on('click', '#del_btn', function () {
+        tag_id = this.getAttribute('tag_id')
+        $.ajax({
+            url: '/BlogBackstage/tag/',
+            type: 'post',
+            data: {
+                'tag_id': tag_id,
+                'do': 'del',
+            },
+            success: function (args) {
+                if (args.error == 200) {
+                    alert(args.mess)
+                    window.location.reload()
+                } else {
+                    alert(args.error + '' + args.mess)
+                }
+            }
+
+        })
+        return false
+    })
+</script>
+
+
+<script>
+    $('#add_content').click(function () {
+        $('#page_body').html(`
+ <form action="/BlogBackstage/add_article/" method="post">
+    {%csrf_token%}
+         <p>
+        <label for="inputtitle" class="col-sm-2 control-label">文章标题</label>
+      <input type="text" class="form-control" id="inputtitle" placeholder="文章标题" name="title">
+    </p>
+
+  <br>
+
+    <p><label for="inputtype" class="col-sm-2 control-label">文章分类</label>
+      <input type="text" class="form-control" id="inputtype" placeholder="文章分类" name="type"></p>
+      <select class="form-control" id ='select_inputtype' style="width: 200px">
+      <option value=''>--请选择--</option>
+          {% for type in types %}
+          <option value='{{type.types}}'>{{type.types}}</option>
+         {% endfor %}
+      </select>
+
+    <br>
+
+    <p><label for="inputtags" class="col-sm-2 control-label">文章标签</label>
+      <input type="text" class="form-control" id="inputtags" placeholder="文章标签" name="tags"></p>
+      <select class="form-control" id='select_inputtags' style="width: 200px">
+      <option value=''>--请选择--</option>
+          {% for tag in tags %}
+          <option value='{{tag.tag}}'>{{tag.tag}}</option>
+         {% endfor %}
+      </select>
+  <br>
+<p>
+        <label for="introduction" class="col-sm-2 control-label">文章简介</label>
+    <textarea class="form-control" rows="3" placeholder="文章简介" maxlength="250" id="introduction" name="introduction"></textarea>
+    </p>
+
+<p>
+        <label for="introduction" class="col-sm-2 control-label">文章内容</label>
+    <textarea class="form-control"   id="text_content" name="content"></textarea>
+    </p>
+
+<br>
+<input type="submit" class="btn btn-default btn-success" value="发布" style="width: 200px;margin: 10px 650px">
+    </form>
+
+
+
+    `)
+        KindEditor.ready(function (k) {
+            window.editor = k.create('#text_content', {
+                width: '100%',
+                height: '400px',
+                resizeTyoe: 1,
+                uploadJson: '/upload/',
+                filterMode: false,
+                extraFileUploadParams: {
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+
+                },
+                afterBlur: function () {
+                    this.sync();
+                },
+            })
+
+        })
+    document.getElementById('select_inputtype').onchange = function () {
+        $('#inputtype').val($('#select_inputtype').val())
+    }
+
+    document.getElementById('select_inputtags').onchange = function () {
+        {#tags = $('#inputtags').val()#}
+        {#$('#inputtags').val(tags+','+$('#select_inputtags').val())#}
+        {#$('#select_inputtags').val()#}
+        document.getElementById('inputtags').value += document.getElementById('select_inputtags').value + ' '
+    }
+        return false
+    })
+
+
+
+
+
+</script>
+
+<script>
+    KindEditor.ready(function (k) {
+        window.editor = k.create('#text_content', {
+            width: '100%',
+            height: '400px',
+            resizeTyoe: 1,
+            uploadJson: '/upload/',
+            filterMode: false,
+            extraFileUploadParams: {
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+
+            },
+            afterBlur: function () {
+                this.sync();
+            },
+        })
+
+    })
+</script>
+</html>

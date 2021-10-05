@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+     <title>全部文章</title>
+    <link rel="stylesheet" href="{% static 'css/list.css' %}">
+    <link rel="stylesheet" type="text/css" href="/static/assets/waifu.min.css?v=1.4.2"/>
+    <style>
+        body {
+            translate: "no"
+        }
+
+        table .type {
+            font-family: 'Montserrat Alternates', sans-serif;
+            font-weight: 900;
+            border-radius: 5px;
+            border: aliceblue solid 1px;
+            background-color: aliceblue;
+            color: black;
+        }
+
+        table .type:hover {
+            color: #a71d5d;
+        }
+
+        table tr #art_title :hover {
+            color: #a71d5d;
+        }
+
+        #art_title:hover {
+            color: #b3d4fc;
+        }
+
+    </style>
+{% endblock %}
+
+{% block body %}
+
+    <div style="position: relative;top: 10%" id="article">
+
+
+        <div class="col-md-6 text-center" style=";position: absolute;right: -25%">
+            <details>
+                <summary>
+                    <span data-css-icon="menu">标签（{{ tag_count }}）<i></i></span>
+                </summary>
+                <div>
+                    <ul>
+                        {% for tag in tags %}
+                            <li class="btn-default" style="line-height: 50px ;">
+                                <a href="/article/q/?Tag={{ tag.id }}">{{ tag.tag }}({{ tag.article2articletag_set.count }})</a>
+                            </li>
+
+                        {% endfor %}
+
+                    </ul>
+                </div>
+            </details>
+            <details>
+                <summary>
+                    <span data-css-icon="menu">分类({{ type_count }})<i></i></span>
+                </summary>
+                <div>
+                    <ul>
+                        {% for type in types %}
+                            {% for type_l in type_list %}
+                                {% if forloop.counter == forloop.parentloop.counter %}
+                                    <li class="btn-default" style="line-height: 50px ;">
+                                        <a href="/article/q/?Type={{ type.id }}">{{ type.types }}({{ type_l.0 }})</a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            </details>
+            <details>
+                <summary>
+                    <span data-css-icon="menu">发布时间({{ date_list.count }})<i></i></span>
+                </summary>
+                <div>
+                    <ul>
+                        {% for date in date_list %}
+                            <li class="btn-default" style="line-height: 50px ;">
+                                <a href="/article/q/?Time={{ date.0|date:'Y-m' }}">{{ date.0|date:'Y-m' }}({{ date.1 }})</a>
+                            </li>
+                        {% endfor %}
+
+                    </ul>
+                </div>
+            </details>
+
+        </div>
+        <div class="col-md-6" style="position: absolute;right: 30%">
+             <h1 class="text-center" style="margin-top:0;color: white;font-family: 'fontawesome'">贝克街 <small  class="glyphicon glyphicon-book"></small></h1>
+            <hr width="200px" style="margin:10px  auto 30px auto">
+            <table class="table text-center" style="color: white;border-bottom: 1px solid">
+                <tr>
+                    <th class="text-center">序号</th>
+                    <th class="text-center">分类</th>
+                    <th class="text-center">标题</th>
+                    <th class="text-center">创建时间</th>
+                    <th class="text-center">修改时间</th>
+                </tr>
+                {% for article_obj in page_queryset %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>
+                            <a class="type"
+                               href="/article/q/?Type={{ article_obj.article_types.id }}">{{ article_obj.article_types.types }}</a>
+                        </td>
+                        <td><a id="art_title" href="/article/q/?Title={{ article_obj.id }}">{{ article_obj.title }}</a>
+                        </td>
+                        <td style="color: darkgrey">{{ article_obj.create_time|date:'Y-m-d H:i:s' }}</td>
+                        <td style="color: darkgrey">{{ article_obj.revise_time|date:'Y-m-d H:i:s' }}</td>
+                    </tr>
+
+                {% endfor %}
+
+            </table>
+            <div class="container col-md-12" style="margin: 0 290px">{{ page_obj.page_html|safe }}</div>
+        </div>
+
+    </div>
+
+
+    </div>
+    </div>
+
+    <script src="/static/assets/jquery.min.js?v=3.3.1"></script>
+
+    <!-- 实现拖动效果，需引入 JQuery UI -->
+    <script src="/static/assets/jquery-ui.min.js?v=1.12.1"></script>
+
+    <div class="waifu">
+        <div class="waifu-tips"></div>
+        <canvas id="live2d" class="live2d"></canvas>
+        <div class="waifu-tool">
+            <span class="fui-home"></span>
+            <span class="fui-chat"></span>
+            <span class="fui-eye"></span>
+            <span class="fui-user"></span>
+            <span class="fui-photo"></span>
+            <span class="fui-info-circle"></span>
+            <span class="fui-cross"></span>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+
+{% block js %}
+    <script src="{% static 'js/list.js' %}"></script>
+
+
+    <script src="/static/assets/waifu-tips.js?v=1.4.2"></script>
+    <script src="/static/assets/live2d.min.js?v=1.0.5"></script>
+    <script type="text/javascript">
+        /* 可直接修改部分参数 */
+        live2d_settings['modelId'] = 4;                  // 默认模型 ID
+        live2d_settings['modelTexturesId'] = 50;         // 默认材质 ID
+        live2d_settings['modelStorage'] = false;         // 不储存模型 ID
+        live2d_settings['canCloseLive2d'] = true;       // 隐藏 关闭看板娘 按钮
+        live2d_settings['canTurnToHomePage'] = false;    // 隐藏 返回首页 按钮
+        live2d_settings['waifuSize'] = '400x350';        // 看板娘大小
+        live2d_settings['waifuTipsSize'] = '250x70';    // 提示框大小
+        live2d_settings['waifuFontSize'] = '20px';       // 提示框字体
+        live2d_settings['waifuToolFont'] = '26px';       // 工具栏字体
+        live2d_settings['waifuToolLine'] = '30px';       // 工具栏行高
+        live2d_settings['waifuToolTop'] = '-60px';       // 工具栏顶部边距
+        live2d_settings['waifuDraggable'] = 'disable';    // 拖拽样式
+        live2d_settings['aboutPageUrl'] = '/';   // 关于页地址, '{URL 网址}'
+        live2d_settings['homePageUrl'] = '/';       // 主页地址，可选 'auto'(自动), '{URL 网址}'
+        live2d_settings['waifuEdgeSide'] = 'right:0';     // 看板娘贴边方向，例如 'left:0'(靠左 0px), 'right:30'(靠右 30px)
+        live2d_settings['waifuDraggableRevert'] = false;         // 松开鼠标还原拖拽位置，可选 true(真), false(假)
+        live2d_settings['canTurnToAboutPage'] = false;         // 显示 跳转关于页  按钮，可选 true(真), false(假)
+        live2d_settings['canTurnToHomePage'] = true;         // 显示 返回首页    按钮，可选 true(真), false(假)
+        /* 在 initModel 前添加 */
+        live2d_settings['showHitokoto'] = true;         // 显示一言
+        live2d_settings['showF12Status'] = true;         // 显示加载状态
+        live2d_settings['showF12Message'] = false;        // 显示看板娘消息
+        live2d_settings['showF12OpenMsg'] = true;         // 显示控制台打开提示
+        live2d_settings['showCopyMessage'] = true;         // 显示 复制内容 提示
+        live2d_settings['showWelcomeMessage'] = true;         // 显示进入面页欢迎词
+        initModel("/static/assets/waifu-tips.json")
+    </script>
+
+{% endblock %}

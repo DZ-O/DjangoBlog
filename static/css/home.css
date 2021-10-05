@@ -1,0 +1,63 @@
+  @media (max-width: 768px) {
+        #beike {
+            z-index: -1;
+            color: rgba(255,255,255,.2);
+        }
+    }
+        .jumbotron {
+            background-color: rgba(0, 0, 0, 0);
+        }
+
+
+        #title {
+            position: absolute;
+            top: 30%;
+            left: 10%;
+        }
+
+
+        .user-box {
+            position: relative;
+        }
+
+        .user-box input {
+            width: 100%;
+            padding: 10px 0;
+            font-size: 16px;
+            color: #fff;
+            margin-bottom: 30px;
+            border: none;
+            border-bottom: 1px solid #fff;
+            outline: none;
+            background: transparent;
+        }
+
+        .user-box label {
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 10px 0;
+            font-size: 16px;
+            color: #fff;
+            pointer-events: none;
+            transition: .5s;
+        }
+
+        .user-box input:focus ~ label,
+        .user-box input:valid ~ label {
+            top: -20px;
+            left: 0;
+            color: #03e9f4;
+            font-size: 12px;
+        }
+
+        textarea::-webkit-input-placeholder {
+
+            color: white;
+
+            font-size: 20px;
+
+        }
+        #article_type:hover {
+            color: #b3d4fc;
+        }

@@ -1,0 +1,388 @@
+.like {
+  display: inline-block;
+  width: 4rem;
+  height:4rem;
+  border-radius: 50%;
+  background: rgba(20, 20, 20, 0.5);
+  position: relative;
+  cursor: pointer;
+  -webkit-transition: background-color 0.25s ease;
+  transition: background-color 0.25s ease;
+  overflow: hidden;
+}
+
+/* Global Button Hover Style for our like/unlike el */
+.like:hover {
+  background: #fff;
+  -webkit-transition: background-color 0.25s ease;
+  transition: background-color 0.25s ease;
+}
+
+/* Liked/Unliked states of our like icon */
+.liked .like-icon-state {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewbox='0 0 100 100'><path fill='%23de3618' d='M50,88.87 C76.67,70.46 90,53.9 90,39.17 C90,17.08 63.12,3.84 50,27.63 C38.875,3.85 10,17.08 10,39.17 C10,53.9 23.33,70.46 50,88.87 Z'/></svg>");
+}
+
+.unliked .like-icon-state {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewbox='0 0 100 100'><path fill='none' stroke='%23666' stroke-width='5' d='M50,88.87 C76.67,70.46 90,53.9 90,39.17 C90,17.08 63.12,3.84 50,27.63 C38.875,3.85 10,17.08 10,39.17 C10,53.9 23.33,70.46 50,88.87 Z'/></svg>");
+}
+
+.like span {
+  text-indent: -1000px;
+  fone-size: 1px;
+}
+
+/* Global aspects of the like icon (holding our icon state view) */
+.like-icon {
+  background-size: contain;
+  position: absolute;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  top: 15%;
+  right: 15%;
+  bottom: 15%;
+  left: 15%;
+}
+
+.liked .like-icon-state {
+  -webkit-transform: scale(0);
+          transform: scale(0);
+}
+
+/* Set initial opacity and attach the like animation  */
+.liked .like-icon-state {
+  opacity: 0;
+  -webkit-animation: 1.2s like-animation both cubic-bezier(0.45, 0.05, 0.55, 0.95);
+          animation: 1.2s like-animation both cubic-bezier(0.45, 0.05, 0.55, 0.95);
+}
+
+@-webkit-keyframes like-animation {
+  0% {
+    -webkit-transform: scale(0);
+            transform: scale(0);
+  }
+  15% {
+    -webkit-transform: scale(1.25);
+            transform: scale(1.25);
+  }
+  32% {
+    -webkit-transform: scale(0.95);
+            transform: scale(0.95);
+  }
+  50% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes like-animation {
+  0% {
+    -webkit-transform: scale(0);
+            transform: scale(0);
+  }
+  15% {
+    -webkit-transform: scale(1.25);
+            transform: scale(1.25);
+  }
+  32% {
+    -webkit-transform: scale(0.95);
+            transform: scale(0.95);
+  }
+  50% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+    opacity: 1;
+  }
+}
+/* Set initial opacity and attach the unlike animation  */
+.unliked .like-icon-state {
+  opacity: 0;
+  -webkit-animation: 1.2s unlike-animation both cubic-bezier(0.45, 0.05, 0.55, 0.95);
+          animation: 1.2s unlike-animation both cubic-bezier(0.45, 0.05, 0.55, 0.95);
+}
+
+@-webkit-keyframes unlike-animation {
+  0% {
+    -webkit-transform: scale(0);
+            transform: scale(0);
+  }
+  15% {
+    -webkit-transform: scale(1.1);
+            transform: scale(1.1);
+  }
+  30% {
+    -webkit-transform: scale(0.98);
+            transform: scale(0.98);
+  }
+  45% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes unlike-animation {
+  0% {
+    -webkit-transform: scale(0);
+            transform: scale(0);
+  }
+  15% {
+    -webkit-transform: scale(1.1);
+            transform: scale(1.1);
+  }
+  30% {
+    -webkit-transform: scale(0.98);
+            transform: scale(0.98);
+  }
+  45% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+    opacity: 1;
+  }
+}
+/* Pop a small animation of the background on like */
+.liked {
+  background: #e2e2e2;
+  -webkit-animation: 1.2s liked-bg-animation both;
+          animation: 1.2s liked-bg-animation both;
+}
+
+@-webkit-keyframes liked-bg-animation {
+  0% {
+    -webkit-transform: scale(0);
+            transform: scale(0);
+  }
+  15% {
+    -webkit-transform: scale(1.1);
+            transform: scale(1.1);
+  }
+  30% {
+    -webkit-transform: scale(0.95);
+            transform: scale(0.95);
+  }
+  50% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes liked-bg-animation {
+  0% {
+    -webkit-transform: scale(0);
+            transform: scale(0);
+  }
+  15% {
+    -webkit-transform: scale(1.1);
+            transform: scale(1.1);
+  }
+  30% {
+    -webkit-transform: scale(0.95);
+            transform: scale(0.95);
+  }
+  50% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+    opacity: 1;
+  }
+}
+/* Pop a more discreet animation of the background on unlike */
+.unliked {
+  -webkit-animation: 1.2s unliked-bg-animation both;
+          animation: 1.2s unliked-bg-animation both;
+}
+
+@-webkit-keyframes unliked-bg-animation {
+  0% {
+    -webkit-transform: scale(0);
+            transform: scale(0);
+  }
+  10% {
+    -webkit-transform: scale(0.7);
+            transform: scale(0.7);
+  }
+  30% {
+    -webkit-transform: scale(0.95);
+            transform: scale(0.95);
+  }
+  50% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes unliked-bg-animation {
+  0% {
+    -webkit-transform: scale(0);
+            transform: scale(0);
+  }
+  10% {
+    -webkit-transform: scale(0.7);
+            transform: scale(0.7);
+  }
+  30% {
+    -webkit-transform: scale(0.95);
+            transform: scale(0.95);
+  }
+  50% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+    opacity: 1;
+  }
+}
+/* Pseudo el for our ring animation */
+.like::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  -webkit-transform: scale(0);
+          transform: scale(0);
+}
+
+/* Apply animation to the ring el */
+.liked::before {
+  -webkit-animation: 1.2s bg-ring-animation both;
+          animation: 1.2s bg-ring-animation both;
+}
+
+@-webkit-keyframes bg-ring-animation {
+  0% {
+    -webkit-transform: scale(0);
+            transform: scale(0);
+    opacity: 0;
+  }
+  10% {
+    -webkit-transform: scale(1.5);
+            transform: scale(1.5);
+    opacity: 0.25;
+  }
+  15% {
+    -webkit-transform: scale(2);
+            transform: scale(2);
+    opacity: 0.15;
+  }
+  45% {
+    -webkit-transform: scale(3.25);
+            transform: scale(3.25);
+    opacity: 0;
+  }
+  to {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+    opacity: 0;
+  }
+}
+
+@keyframes bg-ring-animation {
+  0% {
+    -webkit-transform: scale(0);
+            transform: scale(0);
+    opacity: 0;
+  }
+  10% {
+    -webkit-transform: scale(1.5);
+            transform: scale(1.5);
+    opacity: 0.25;
+  }
+  15% {
+    -webkit-transform: scale(2);
+            transform: scale(2);
+    opacity: 0.15;
+  }
+  45% {
+    -webkit-transform: scale(3.25);
+            transform: scale(3.25);
+    opacity: 0;
+  }
+  to {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+    opacity: 0;
+  }
+}
+.saving::after {
+  content: '';
+  box-sizing: border-box;
+  position: absolute;
+  top: 20%;
+  left: 20%;
+  width: 60%;
+  height: 60%;
+  border: 0.15em solid rgba(100, 100, 100, 0.5);
+  border-radius: 50%;
+  border-right-color: transparent;
+  border-top-color: transparent;
+  -webkit-animation: spin-animation 400ms infinite linear;
+          animation: spin-animation 400ms infinite linear;
+}
+
+@-webkit-keyframes spin-animation {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
+@keyframes spin-animation {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+/* eof */
