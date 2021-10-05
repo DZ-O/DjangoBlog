@@ -313,11 +313,11 @@ def blogLogin(request):
         code += tmp
     # 随机验证码在登陆的视图函数里面需要用到 要比对 所以要找地方存起来并且其他视图函数也能拿到
     request.session['code'] = code
-    email_from = "2669191008@qq.com"  # 改为自己的发送邮箱
-    email_to = "2669191008@qq.com"  # 接收邮箱
+    email_from = "@qq.com"  # 改为自己的发送邮箱
+    email_to = "@qq.com"  # 接收邮箱
     hostname = "smtp.qq.com"  # 不变，QQ邮箱的smtp服务器地址
-    login = "2669191008@qq.com"  # 发送邮箱的用户名
-    password = "pbjqucdjzjzrebde"  # 发送邮箱的密码，即开启smtp服务得到的授权码。注：不是QQ密码。
+    login = "@qq.com"  # 发送邮箱的用户名
+    password = ""  # 发送邮箱的密码，即开启smtp服务得到的授权码。注：不是QQ密码。
     subject = "贝克街验证码"  # 邮件主题
     text = "贝克街验证码:" + code  # 邮件正文内容
 
